@@ -51,7 +51,7 @@ layout: default
       
         var disqus_config = function () {
           this.page.title = "{{ page.title }}";
-          this.page.url = "{{ page.url | prepend: site.baseurl | absolute_url }}";
+          this.page.url = "{{ page.url | absolute_url }}";
           this.page.identifier = "{{ page.id }}";
         };
 

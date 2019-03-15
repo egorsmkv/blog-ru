@@ -7124,3 +7124,8 @@ td.visible-print {
     margin-top: -70px;
 }
 */
+
+.docs-content {
+  word-wrap: break-word; 
+  padding: 1px 20px 20px 20px;
+}

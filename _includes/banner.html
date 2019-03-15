@@ -1,0 +1,14 @@
+<div class="banner">
+  <div class="container">
+  	{% if page.categories != null %}
+
+    	 {% for category in page.categories %}
+		      <a href="{{ '/categories/' | prepend: site.baseurl }}/{{ category }}">{{ category.title }}</a>
+		  {% endfor %}
+
+    	<a href="{{ '/tag/' | prepend: site.baseurl }}#{{page.tag}}-ref">{{page.tag}}</a>
+    {% else %}
+    	{{ site.banner }}
+    {% endif %}
+  </div>
+</div>

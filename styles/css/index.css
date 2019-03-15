@@ -7128,4 +7128,9 @@ td.visible-print {
 .docs-content {
   word-wrap: break-word; 
   padding: 1px 20px 20px 20px;
+  margin-bottom:10px;
+}
+
+.no-left-padding > li{
+  padding-left: 0;
 }

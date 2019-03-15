@@ -1,20 +1,10 @@
-# Site settings
-name: Егор Смоляков
+name: Техблог Егора Смолякова
 email: yehors@ukr.net
 author: Егор Смоляков
 url: https://egorsmkv.github.io
-github: https://github.com/egorsmkv/
 baseurl: "/blog-ru"
-description: "Технический блог: заметки и размышления"
-meta_description: Технический блог Егора Смолякова.
-
+meta_description: Заметки и размышления на технические и программистские темы. 
 permalink: /:year/:month/:day/:title/
-paginate: 10
-
 exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
-
 timezone: "Europe/Kiev"
-
 markdown: kramdown
-
-plugins: [jekyll-paginate]

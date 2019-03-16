@@ -5,6 +5,6 @@ url: https://egorsmkv.github.io
 baseurl: "/blog-ru"
 meta_description: Заметки и размышления на технические и программистские темы. 
 permalink: /:year/:month/:day/:title/
-exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
+exclude: ['.idea', 'README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
 timezone: "Europe/Kiev"
 markdown: kramdown

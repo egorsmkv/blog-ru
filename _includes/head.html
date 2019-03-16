@@ -1,26 +1,27 @@
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>{{ page.title | append: ' - ' | append: site.name }}</title>
+    <title>{{ page.title | append: ' - ' | append: site.name }}</title>
 
-	<link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | prepend: site.baseurl }}">
-	<link rel="icon" type="image/png" sizes="32x32" href="{{ '/favicon-32x32.png' | prepend: site.baseurl }}">
-	<link rel="icon" type="image/png" sizes="16x16" href="{{ '/favicon-16x16.png' | prepend: site.baseurl }}">
-	<link rel="manifest" href="{{ '/site.webmanifest' | prepend: site.baseurl }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | prepend: site.baseurl }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ '/favicon-32x32.png' | prepend: site.baseurl }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ '/favicon-16x16.png' | prepend: site.baseurl }}">
+    <link rel="manifest" href="{{ '/site.webmanifest' | prepend: site.baseurl }}">
 
-	<link rel="stylesheet" href="{{ '/styles/css/index.min.css' | prepend: site.baseurl }}">
-	<link rel="stylesheet" href="{{ '/styles/css/fontawesome/css/font-awesome.min.css' | prepend: site.baseurl }}">
-	<link rel="stylesheet" href="{{ '/styles/css/syntax.css' | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ '/assets/css/index.min.css' | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ '/assets/css/fontawesome/css/font-awesome.min.css' | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ '/assets/css/syntax.css' | prepend: site.baseurl }}">
 
-	<link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl }}">
-	<link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ '/feed.xml' | prepend: site.baseurl }}">
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.name }}"
+          href="{{ '/feed.xml' | prepend: site.baseurl }}">
 
-	<meta name="description" content="{{ site.meta_description }}">
+    <meta name="description" content="{{ site.meta_description }}">
 
-	<script src="{{ '/styles/js/jquery.min.js' | prepend: site.baseurl }}"></script>
-	<!--[if lt IE 9]>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-	<![endif]-->
+    <script src="{{ '/assets/js/jquery.min.js' | prepend: site.baseurl }}"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
 </head>

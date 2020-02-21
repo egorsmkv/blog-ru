@@ -11,7 +11,7 @@ comments: true
 > Это перевод статьи [MySQL high availability with HAProxy, Consul and Orchestrator][1],
 > которую написал **Ivan Groenewold**.
 
-#### Введение
+### Введение
 
 В этом посте мы исследуем один подход для достижения высокой доступности MySQL с помощью HAProxy, Consul и Orchestrator.
 
@@ -22,12 +22,12 @@ comments: true
 - **Consul** должен сообщить адрес новой мастер-ноды, который передаст **Orchestrator**. Используя Consul Template мы сможем потом передать этот адрес в **HAProxy**.
 
 
-#### Доказательство концепции
+### Доказательство концепции
 
 Для этого я установил 3 тестовых сервера, на каждом из которых запущен MySQL и Consul: mysql1, mysql2 и mysql3.
 На сервере mysql3 я также установил HAProxy, Orchestrator и Consul Template.
 
-##### Установка Consul
+#### Установка Consul
 
 1. Установите Consul на mysql1, mysql2 и mysql3:
 
@@ -108,7 +108,7 @@ $ consul kv get foo
 bar
 ```
 
-##### Настройка Orchestrator'a, чтобы он писал в Consul
+#### Настройка Orchestrator'a, чтобы он писал в Consul
 
 К счастью, [Orchestrator имеет встроенную поддержку для Consul'a][1], поэтому мы потратим немного времени на это. Единственное предостережение: нам нужно чтобы Orchestrator заполнил значения в Consul'e, поэтому нужно вручную вызвать orchestrator-client. Это из-за того, что Orchestrator будет только записывать значения каждый раз, когда произойдут изменения о мастер-ноде.
 
@@ -139,7 +139,7 @@ bar
 	mysql1:3306
 	```
 
-##### Использование Consul Template для управления HAProxy
+#### Использование Consul Template для управления HAProxy
 
 Так как HAProxy у нас запущен на mysql3, то нам нужно установить Consul Template на этот сервер для управления настройками HAProxy. Идея в том, чтобы настроить Consul Template для динамического обновления файла шаблона настроек HAProxy и перезапустить HAProxy используя изменённый файл настроек.
 
@@ -287,7 +287,7 @@ Redirecting to /bin/systemctl reload  haproxy.service
 
 Что произошло? Orchestrator обновил ключ/значение в Consul'e и Consul Template обнаружил это изменение и в свою очередь обновил файл настроек HAProxy, после этого перезапустил HAProxy.
 
-#### Заключение
+### Заключение
 
 HAProxy все еще широко используется как прокcи/балансировщик нагрузки для MySQL, поэтому красиво иметь возможность сочетать его с Orchestrator'ом и Consul'ом, чтобы собрать решение для высокой доступности.
 

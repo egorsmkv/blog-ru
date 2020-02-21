@@ -31,75 +31,73 @@ comments: true
 
 1. Установите Consul на mysql1, mysql2 и mysql3:
 
-```
-$ sudo yum -y install unzip 
-$ sudo useradd consul
-$ sudo mkdir -p /opt/consul 
-$ sudo touch /var/log/consul.log 
-$ cd /opt/consul
-$ sudo wget https://releases.hashicorp.com/consul/1.0.7/consul_1.0.7_linux_amd64.zip
-$ sudo unzip consul_1.0.7_linux_amd64.zip
-$ sudo ln -s /opt/consul/consul /usr/local/bin/consul
-$ sudo chown consul:consul -R /opt/consul* /var/log/consul.log
-```
+	```
+	$ sudo yum -y install unzip 
+	$ sudo useradd consul
+	$ sudo mkdir -p /opt/consul 
+	$ sudo touch /var/log/consul.log 
+	$ cd /opt/consul
+	$ sudo wget https://releases.hashicorp.com/consul/1.0.7/consul_1.0.7_linux_amd64.zip
+	$ sudo unzip consul_1.0.7_linux_amd64.zip
+	$ sudo ln -s /opt/consul/consul /usr/local/bin/consul
+	$ sudo chown consul:consul -R /opt/consul* /var/log/consul.log
+	```
 
 2. Установите Consul-кластер с одной нодой. Я выбрал mysql3:
 
-```
-$ sudo vi /etc/consul.conf.json
-{
-  "datacenter": "dc1",
-  "data_dir": "/opt/consul/",
-  "log_level": "INFO",
-  "node_name": "mysql3",
-  "server": true,
-  "ui": true,
-  "bootstrap": true,
-  "client_addr": "0.0.0.0",
-  "advertise_addr": "192.168.56.102"  
-}
-$ sudo su - consul -c 'consul agent -config-file=/etc/consul.conf.json -config-dir=/etc/consul.d > /var/log/consul.log &'
-``` 
+	```
+	$ sudo vi /etc/consul.conf.json
+	{
+	  "datacenter": "dc1",
+	  "data_dir": "/opt/consul/",
+	  "log_level": "INFO",
+	  "node_name": "mysql3",
+	  "server": true,
+	  "ui": true,
+	  "bootstrap": true,
+	  "client_addr": "0.0.0.0",
+	  "advertise_addr": "192.168.56.102"  
+	}
+	$ sudo su - consul -c 'consul agent -config-file=/etc/consul.conf.json -config-dir=/etc/consul.d > /var/log/consul.log &'
+	``` 
 
 3. Запустите Consul на mysql1 и сделайте так, чтобы он присоединился к кластеру:
 
-```
-$ sudo vi /etc/consul.conf.json
-{
-  "datacenter": "dc1",
-  "data_dir": "/opt/consul/",
-  "log_level": "INFO",
-  "node_name": "mysql1",  
-  "server": true,
-  "ui": true,
-  "bootstrap": false,   
-  "client_addr": "0.0.0.0",
-  "advertise_addr": "192.168.56.100"  
-}
-
-$ sudo su - consul -c 'consul agent -config-file=/etc/consul.conf.json -config-dir=/etc/consul.d > /var/log/consul.log &'
-$ consul join 192.168.56.102
-```
+	```
+	$ sudo vi /etc/consul.conf.json
+	{
+	  "datacenter": "dc1",
+	  "data_dir": "/opt/consul/",
+	  "log_level": "INFO",
+	  "node_name": "mysql1",  
+	  "server": true,
+	  "ui": true,
+	  "bootstrap": false,   
+	  "client_addr": "0.0.0.0",
+	  "advertise_addr": "192.168.56.100"  
+	}
+	$ sudo su - consul -c 'consul agent -config-file=/etc/consul.conf.json -config-dir=/etc/consul.d > /var/log/consul.log &'
+	$ consul join 192.168.56.102
+	```
 
 4. Запустите Consul на mysql2 и сделайте так, чтобы он присоединился к кластеру:
 
-```
-$ sudo vi /etc/consul.conf.json
-{
-  "datacenter": "dc1",
-  "data_dir": "/opt/consul/",
-  "log_level": "INFO",
-  "node_name": "mysql2", 
-  "server": true,
-  "ui": true,
-  "bootstrap": false,   
-  "client_addr": "0.0.0.0",
-  "advertise_addr": "192.168.56.101"
-}
-
-$ sudo su - consul -c 'consul agent -config-file=/etc/consul.conf.json -config-dir=/etc/consul.d > /var/log/consul.log &'
-$ consul join 192.168.56.102
-```
+	```
+	$ sudo vi /etc/consul.conf.json
+	{
+	  "datacenter": "dc1",
+	  "data_dir": "/opt/consul/",
+	  "log_level": "INFO",
+	  "node_name": "mysql2", 
+	  "server": true,
+	  "ui": true,
+	  "bootstrap": false,   
+	  "client_addr": "0.0.0.0",
+	  "advertise_addr": "192.168.56.101"
+	}
+	$ sudo su - consul -c 'consul agent -config-file=/etc/consul.conf.json -config-dir=/etc/consul.d > /var/log/consul.log &'
+	$ consul join 192.168.56.102
+	```
 
 На этом этапе у нас есть работающий Consul-кластер состоящий из 3-х нод. Мы можем протестировать запись пары ключ/значение и получить её обратно:
 
@@ -116,30 +114,30 @@ bar
 
 1. Настройте Orchestrator на запись в Consul'e на каждое изменение о мастер-ноде. Добавьте следующие строки в настройки Orchestrator'а:
 
-```
-$ vi /etc/orchestrator.conf.json
-  "KVClusterMasterPrefix": "mysql/master",
-  "ConsulAddress": "127.0.0.1:8500",
-```
+	```
+	$ vi /etc/orchestrator.conf.json
+	  "KVClusterMasterPrefix": "mysql/master",
+	  "ConsulAddress": "127.0.0.1:8500",
+	```
 
 2. Перезапустите Orchestrator:
 
-```
-$ service orchestrator restart
-```
+	```
+	$ service orchestrator restart
+	```
 
 3. Заполните вручную текущее значение о мастер-ноде:
 
-```
-$ orchestrator-client -c submit-masters-to-kv-stores
-```
+	```
+	$ orchestrator-client -c submit-masters-to-kv-stores
+	```
 
 4. Проверьте сохраненные значения через консоль:
 
-```
-$ consul kv get mysql/master/testcluster
-mysql1:3306
-```
+	```
+	$ consul kv get mysql/master/testcluster
+	mysql1:3306
+	```
 
 ##### Использование Consul Template для управления HAProxy
 
@@ -149,133 +147,133 @@ mysql1:3306
 
 1. Установите Consul Template на mysql3:
 
-```
-$ mkdir /opt/consul-template
-$ cd /opt/consul-template
-$ sudo wget https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_amd64.zip
-$ sudo unzip consul-template_0.19.4_linux_amd64.zip
-$ sudo ln -s /opt/consul-template/consul-template /usr/local/bin/consul-template
-```
+	```
+	$ mkdir /opt/consul-template
+	$ cd /opt/consul-template
+	$ sudo wget https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_amd64.zip
+	$ sudo unzip consul-template_0.19.4_linux_amd64.zip
+	$ sudo ln -s /opt/consul-template/consul-template /usr/local/bin/consul-template
+	```
 
 2. Создайте шаблон для настроек HAProxy:
 
-```
-$ vi /opt/consul-template/templates/haproxy.ctmpl
+	```
+	$ vi /opt/consul-template/templates/haproxy.ctmpl
 
-global
-log 127.0.0.1 local0
-log 127.0.0.1 local1 notice
-maxconn 4096
-chroot /usr/share/haproxy
-user haproxy
-group haproxy
-daemon
+	global
+	log 127.0.0.1 local0
+	log 127.0.0.1 local1 notice
+	maxconn 4096
+	chroot /usr/share/haproxy
+	user haproxy
+	group haproxy
+	daemon
 
-defaults
-log global
-mode http
-option tcplog
-option dontlognull
-retries 3
-option redispatch
-maxconn 2000
-contimeout 5000
-clitimeout 50000
-srvtimeout 50000
+	defaults
+	log global
+	mode http
+	option tcplog
+	option dontlognull
+	retries 3
+	option redispatch
+	maxconn 2000
+	contimeout 5000
+	clitimeout 50000
+	srvtimeout 50000
 
-frontend writer-front
-bind *:3307
-mode tcp
-default_backend writer-back
+	frontend writer-front
+	bind *:3307
+	mode tcp
+	default_backend writer-back
 
-frontend stats-front
-bind *:80
-mode http
-default_backend stats-back
+	frontend stats-front
+	bind *:80
+	mode http
+	default_backend stats-back
 
-frontend reader-front
-bind *:3308
-mode tcp
-default_backend reader-back
+	frontend reader-front
+	bind *:3308
+	mode tcp
+	default_backend reader-back
 
-backend writer-back
-mode tcp
-option httpchk
-server master {{key "mysql/master/testcluster"}} check port 9200 inter 12000 rise 3 fall 3
+	backend writer-back
+	mode tcp
+	option httpchk
+	server master {{key "mysql/master/testcluster"}} check port 9200 inter 12000 rise 3 fall 3
 
-backend stats-back
-mode http
-balance roundrobin
-stats uri /haproxy/stats
-stats auth user:pass
+	backend stats-back
+	mode http
+	balance roundrobin
+	stats uri /haproxy/stats
+	stats auth user:pass
 
-backend reader-back
-mode tcp
-balance leastconn
-option httpchk
-server slave1 192.168.56.101:3306 check port 9200 inter 12000 rise 3 fall 3
-server slave2 192.168.56.102:3306 check port 9200 inter 12000 rise 3 fall 3
-server master 192.168.56.100:3306 check port 9200 inter 12000 rise 3 fall 3
-```
+	backend reader-back
+	mode tcp
+	balance leastconn
+	option httpchk
+	server slave1 192.168.56.101:3306 check port 9200 inter 12000 rise 3 fall 3
+	server slave2 192.168.56.102:3306 check port 9200 inter 12000 rise 3 fall 3
+	server master 192.168.56.100:3306 check port 9200 inter 12000 rise 3 fall 3
+	```
 
 3. Создайте файл настроек Consul Template:
 
-```
-$ vi /opt/consul-template/config/consul-template.cfg
+	```
+	$ vi /opt/consul-template/config/consul-template.cfg
 
-consul {
-  auth {
-    enabled = false
-  }
+	consul {
+	  auth {
+	    enabled = false
+	  }
 
-  address = "127.0.0.1:8500"
+	  address = "127.0.0.1:8500"
 
-  retry {
-    enabled = true
-    attempts = 12
-    backoff = "250ms"
-    max_backoff = "1m"
-  }
+	  retry {
+	    enabled = true
+	    attempts = 12
+	    backoff = "250ms"
+	    max_backoff = "1m"
+	  }
 
-  ssl {
-    enabled = false
-  }
-}
+	  ssl {
+	    enabled = false
+	  }
+	}
 
-reload_signal = "SIGHUP"
-kill_signal = "SIGINT"
-max_stale = "10m"
-log_level = "info"
+	reload_signal = "SIGHUP"
+	kill_signal = "SIGINT"
+	max_stale = "10m"
+	log_level = "info"
 
-wait {
-  min = "5s"
-  max = "10s"
-}
+	wait {
+	  min = "5s"
+	  max = "10s"
+	}
 
-template {
-  source = "/opt/consul-template/templates/haproxy.ctmpl"
-  destination = "/etc/haproxy/haproxy.cfg"
-  command = "sudo service haproxy reload || true"
-  command_timeout = "60s"
-  perms = 0600
-  backup = true 
-  wait = "2s:6s"
-}
-```
+	template {
+	  source = "/opt/consul-template/templates/haproxy.ctmpl"
+	  destination = "/etc/haproxy/haproxy.cfg"
+	  command = "sudo service haproxy reload || true"
+	  command_timeout = "60s"
+	  perms = 0600
+	  backup = true 
+	  wait = "2s:6s"
+	}
+	```
 
 4. Дайте sudo-права для Consul Template, чтобы он смог перезапускать HAProxy:
 
-```
-$ sudo vi /etc/sudoers
+	```
+	$ sudo vi /etc/sudoers
 
-consul ALL=(root) NOPASSWD:/usr/bin/lsof, ...,/sbin/service haproxy reload
-```
+	consul ALL=(root) NOPASSWD:/usr/bin/lsof, ...,/sbin/service haproxy reload
+	```
 
 5. Запустите consul-template:
 
-```
-$ nohup /usr/local/bin/consul-template -config=/opt/consul-template/config/consul-template.cfg > /var/log/consul-template/consul-template.log 2>&1 &
-```
+	```
+	$ nohup /usr/local/bin/consul-template -config=/opt/consul-template/config/consul-template.cfg > /var/log/consul-template/consul-template.log 2>&1 &
+	```
 
 Итак, это всё, что нам нужно. Следующий шаг - изменить адрес мастер-ноды (например, через Orchestrator GUI) и увидеть изменения:
 

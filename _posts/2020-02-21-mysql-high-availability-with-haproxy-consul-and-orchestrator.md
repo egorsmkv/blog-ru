@@ -161,59 +161,59 @@ bar
 	$ vi /opt/consul-template/templates/haproxy.ctmpl
 
 	global
-	log 127.0.0.1 local0
-	log 127.0.0.1 local1 notice
-	maxconn 4096
-	chroot /usr/share/haproxy
-	user haproxy
-	group haproxy
-	daemon
+		log 127.0.0.1 local0
+		log 127.0.0.1 local1 notice
+		maxconn 4096
+		chroot /usr/share/haproxy
+		user haproxy
+		group haproxy
+		daemon
 
 	defaults
-	log global
-	mode http
-	option tcplog
-	option dontlognull
-	retries 3
-	option redispatch
-	maxconn 2000
-	contimeout 5000
-	clitimeout 50000
-	srvtimeout 50000
+		log global
+		mode http
+		option tcplog
+		option dontlognull
+		retries 3
+		option redispatch
+		maxconn 2000
+		contimeout 5000
+		clitimeout 50000
+		srvtimeout 50000
 
 	frontend writer-front
-	bind *:3307
-	mode tcp
-	default_backend writer-back
+		bind *:3307
+		mode tcp
+		default_backend writer-back
 
 	frontend stats-front
-	bind *:80
-	mode http
-	default_backend stats-back
+		bind *:80
+		mode http
+		default_backend stats-back
 
 	frontend reader-front
-	bind *:3308
-	mode tcp
-	default_backend reader-back
+		bind *:3308
+		mode tcp
+		default_backend reader-back
 
 	backend writer-back
-	mode tcp
-	option httpchk
-	server master {{key "mysql/master/testcluster"}} check port 9200 inter 12000 rise 3 fall 3
+		mode tcp
+		option httpchk
+		server master {{key "mysql/master/testcluster"}} check port 9200 inter 12000 rise 3 fall 3
 
 	backend stats-back
-	mode http
-	balance roundrobin
-	stats uri /haproxy/stats
-	stats auth user:pass
+		mode http
+		balance roundrobin
+		stats uri /haproxy/stats
+		stats auth user:pass
 
 	backend reader-back
-	mode tcp
-	balance leastconn
-	option httpchk
-	server slave1 192.168.56.101:3306 check port 9200 inter 12000 rise 3 fall 3
-	server slave2 192.168.56.102:3306 check port 9200 inter 12000 rise 3 fall 3
-	server master 192.168.56.100:3306 check port 9200 inter 12000 rise 3 fall 3
+		mode tcp
+		balance leastconn
+		option httpchk
+		server slave1 192.168.56.101:3306 check port 9200 inter 12000 rise 3 fall 3
+		server slave2 192.168.56.102:3306 check port 9200 inter 12000 rise 3 fall 3
+		server master 192.168.56.100:3306 check port 9200 inter 12000 rise 3 fall 3
 	```
 
 3. Создайте файл настроек Consul Template:
